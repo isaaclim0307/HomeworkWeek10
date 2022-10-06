@@ -1,0 +1,87 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "width": 500,
+    "height": 400,
+    "title": "Birth Rate and Death Rate per Country",
+    "data": {
+      "url": "https://raw.githubusercontent.com/isaaclim0307/3179/main/Birthrate_and_Deathrate_final.csv"
+    },
+    "encoding": {
+      "x": {
+        "field": "Birthrate",
+        "type": "quantitative",
+        "title": "Birth Rate"
+      },
+      "y": {
+        "field": "Deathrate",
+        "type": "quantitative",
+        "title": "Death Rate"
+      }
+    },
+    "layer": [
+      {
+        "selection": {
+          "continent_highlight": {
+            "type": "multi",
+            "fields": ["Region"],
+            "bind": "legend"
+          }
+        },
+        "mark": "circle",
+        "encoding": {
+          "size": {
+            "field": "Population",
+            "type": "quantitative",
+            "scale": {
+              "type": "threshold",
+              "domain": [1000000, 5000000, 10000000, 50000000, 100000000],
+              "range": [10, 50, 150, 200, 300, 400]
+            }
+          },
+          "color": {
+            "field": "Region",
+            "type": "nominal",
+            "scale": {
+              "domain": ["ASIA (EX. NEAR EAST)", "BALTICS", "C.W. OF IND. STATES", "EASTERN EUROPE", "LATIN AMER. & CARIB", "NEAR EAST",  "NORTHERN AFRICA", "NORTHERN AMERICA", "OCEANIA", "SUB-SAHARAN AFRICA", "WESTERN EUROPE"],
+              "range": ["#e41a1c","#984ea3","#ff7f00","#a6cee3","#377eb8","#a65628", "#ec7c26", "#f3a505", "#8673a1", "#025669", "#8e402a"]
+            }
+          },
+          "opacity": {
+            "condition": {"selection": "continent_highlight", "value": 0.6},
+            "value": 0.2
+          },
+          "tooltip": [
+            {"field": "Country", "type": "nominal"},
+            {"field": "Birthrate", "type": "quantitative", "format": ","},
+            {"field": "Deathrate", "type": "quantitative", "format": ","}
+          ]
+        }
+      },
+      {
+        "mark": {
+          "type": "text",
+          "align": "right",
+          "baseline": "middle",
+          "dx": -12,
+          "fontSize": 11.5,
+          "fontStyle": "italic"
+        },
+        "encoding": {
+          "text": {"field": "Country", "type": "nominal"},
+          "color": {"value": "black"},
+          "opacity": {
+            "condition": {
+              "test": "datum['Country'] == 'China' || datum['Country'] == 'Singapore' || datum['Country'] == 'Australia' || datum['Country'] == 'Malaysia' || datum['Country'] == 'Italy' || datum['Country'] == 'Yemen' || datum['Country'] == 'Nigeria'", 
+              "value": 1
+            },
+            "value": 0
+          },
+          "tooltip": [
+            {"field": "Country", "type": "nominal"},
+            {"field": "Birthrate", "type": "quantitative", "format": ","},
+            {"field": "Deathrate", "type": "quantitative", "format": ","}
+          ]
+        }
+      }
+    ]
+  }
